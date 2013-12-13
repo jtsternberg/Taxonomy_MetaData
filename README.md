@@ -1,7 +1,7 @@
 Taxonomy_MetaData
 =================
 
-WordPress Helper Class for saving pseudo-metadata for taxonomy terms
+WordPress Helper Class for saving pseudo-metadata for taxonomy terms. This is not recommend if using on a very large number of terms.
 
 
 #### To initate Taxonomy_MetaData:
