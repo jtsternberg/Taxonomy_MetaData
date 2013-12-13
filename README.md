@@ -3,6 +3,8 @@ Taxonomy_MetaData
 
 WordPress Helper Class for saving pseudo-metadata for taxonomy terms. This is not recommend if using on a very large number of terms.
 
+Originally inspired by [@williamsba](http://github.com/williamsba). Read his article here: [How To: Save Taxonomy Meta Data as an Options Array in WordPress](http://strangework.com/2010/07/01/how-to-save-taxonomy-meta-data-as-an-options-array-in-wordpress/).
+
 
 #### To initate Taxonomy_MetaData:
 ```php
