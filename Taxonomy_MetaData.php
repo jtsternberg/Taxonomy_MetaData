@@ -68,13 +68,13 @@ class Taxonomy_MetaData {
 	 * Get Started
 	 * @since  0.1.0
 	 */
-	public function __construct( $taxonomy, $fields_or_callback, $title = '', $option_callbacks = array() ) {
+	public function __construct( $taxonomy, $fields, $title = '', $option_callbacks = array() ) {
 		if ( isset( self::$taxonomy_objects[ $taxonomy ] ) )
 			return;
 
 		$this->taxonomy      = $taxonomy;
 		$this->id_base       = strtolower( __CLASS__ ) . '_' . $this->taxonomy;
-		$this->fields        = $fields_or_callback;
+		$this->fields        = $fields;
 		$this->section_title = $title;
 
 		// Can replace the option API setters/getters
