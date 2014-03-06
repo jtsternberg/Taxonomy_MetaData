@@ -10,8 +10,8 @@ if ( ! class_exists( 'Taxonomy_MetaData_CMB' ) ) :
  */
 class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 
-	public function __construct( $taxonomy, $fields, $title = '', $option_callbacks = array() ) {
-		parent::__construct( $taxonomy, $fields, $title, $option_callbacks );
+	public function __construct( $taxonomy, $fields, $option_callbacks = array() ) {
+		parent::__construct( $taxonomy, $fields, '', $option_callbacks );
 	}
 
 	/**

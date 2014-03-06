@@ -341,7 +341,7 @@ class Taxonomy_MetaData {
 	 * @param  string $key      Term meta key to check
 	 * @return mixed            Requested value | false
 	 */
-	public static function get( $taxonomy, $term_id = '', $key = '' ) {
+	public static function get( $taxonomy, $term_id, $key = '' ) {
 		// Get taxonomy instance
 		$instance = self::get_instance( $taxonomy );
 		// Return the meta, or false if the taxonomy object doesn't exist
