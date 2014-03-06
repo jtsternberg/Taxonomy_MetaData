@@ -3,7 +3,7 @@
 if ( ! class_exists( 'Taxonomy_MetaData' ) ) :
 /**
  * Adds pseudo term meta functionality
- * @version 0.1.1
+ * @version 0.1.3
  * @author  Justin Sternberg
  */
 class Taxonomy_MetaData {
@@ -68,13 +68,13 @@ class Taxonomy_MetaData {
 	 * Get Started
 	 * @since  0.1.0
 	 */
-	public function __construct( $taxonomy, $fields_or_callback, $title = '', $option_callbacks = array() ) {
+	public function __construct( $taxonomy, $fields, $title = '', $option_callbacks = array() ) {
 		if ( isset( self::$taxonomy_objects[ $taxonomy ] ) )
 			return;
 
 		$this->taxonomy      = $taxonomy;
 		$this->id_base       = strtolower( __CLASS__ ) . '_' . $this->taxonomy;
-		$this->fields        = $fields_or_callback;
+		$this->fields        = $fields;
 		$this->section_title = $title;
 
 		// Can replace the option API setters/getters
@@ -152,6 +152,17 @@ class Taxonomy_MetaData {
 
 		// Initiate ID
 		$this->id( $term_id );
+		// Display Form
+		$this->display_form( $term_id );
+
+	}
+
+	/**
+	 * Displays form markup
+	 * @since  0.1.3
+	 * @param  int  $term_id Term ID
+	 */
+	public function display_form( $term_id ) {
 		// Get term meta
 		$data = call_user_func( $this->get_option, $this->id() );
 
@@ -212,13 +223,6 @@ class Taxonomy_MetaData {
 	 */
 	public function save_data( $term_id ) {
 
-		if (
-			// check nonce
-			! isset( $_POST['term_opt_name'], $_POST['term_meta_box_nonce'], $_POST['action'] )
-			|| ! wp_verify_nonce( $_POST['term_meta_box_nonce'], 'term_meta_box_nonce' )
-		)
-			return;
-
 		// Can the user edit this term?
 		if ( ! current_user_can( $this->taxonomy_object()->cap->edit_terms ) )
 			return;
@@ -226,6 +230,23 @@ class Taxonomy_MetaData {
 		$this->id = ( false !== strpos( $_POST['term_opt_name'], 'setme' ) )
 			? $this->id = $this->id_base .'_'. $term_id
 			: $this->id( $term_id );
+
+		$this->do_save( $term_id );
+	}
+
+	/**
+	 * Handles saving of the $_POST data
+	 * @since  0.1.3
+	 * @param  int $term_id Term's ID
+	 */
+	public function do_save( $term_id ) {
+
+		if (
+			// check nonce
+			! isset( $_POST['term_opt_name'], $_POST['term_meta_box_nonce'], $_POST['action'] )
+			|| ! wp_verify_nonce( $_POST['term_meta_box_nonce'], 'term_meta_box_nonce' )
+		)
+			return;
 
 		$this->sanitized = array();
 
