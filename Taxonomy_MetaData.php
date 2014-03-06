@@ -65,31 +65,10 @@ class Taxonomy_MetaData {
 	protected $meta = array();
 
 	/**
-	 * Option getter function (can replace with wlo_get_option)
-	 * @since  0.1.1
-	 * @var array
-	 */
-	protected $get_option = 'get_option';
-
-	/**
-	 * Option updater function (can replace with wlo_update_option)
-	 * @since  0.1.1
-	 * @var array
-	 */
-	protected $update_option = 'update_option';
-
-	/**
-	 * Option deleter function (can replace with wlo_delete_option)
-	 * @since  0.1.1
-	 * @var array
-	 */
-	protected $delete_option = 'delete_option';
-
-	/**
 	 * Get Started
 	 * @since  0.1.0
 	 */
-	public function __construct( $taxonomy, $fields_or_callback, $title = '' ) {
+	public function __construct( $taxonomy, $fields_or_callback, $title = '', $option_callbacks = array() ) {
 		if ( isset( self::$taxonomy_objects[ $taxonomy ] ) )
 			return;
 
@@ -97,6 +76,14 @@ class Taxonomy_MetaData {
 		$this->id_base       = strtolower( __CLASS__ ) . '_' . $this->taxonomy;
 		$this->fields        = $fields_or_callback;
 		$this->section_title = $title;
+
+		// Can replace the option API setters/getters
+		foreach ( wp_parse_args( $option_callbacks, array(
+			'get_option'    => 'get_option',
+			'update_option' => 'update_option',
+			'delete_option' => 'delete_option',
+		) ) as $var => $cb )
+			$this->$var = $cb;
 
 		self::$taxonomy_objects[ $taxonomy ] = $this;
 		add_action( 'admin_init', array( $this, 'hooks' ) );
