@@ -5,7 +5,7 @@ require_once( 'Taxonomy_MetaData.php' );
 if ( ! class_exists( 'Taxonomy_MetaData_CMB' ) ) :
 /**
  * Adds pseudo term meta functionality
- * @version 0.1.1
+ * @version 0.1.3
  * @author  Justin Sternberg
  */
 class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
@@ -61,7 +61,7 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 
 	/**
 	 * Filters CMB setting/getting
-	 * @since  0.1.0
+	 * @since  0.1.3
 	 */
 	public function do_override_filters( $term_id ) {
 
@@ -76,7 +76,7 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 
 	/**
 	 * Replaces get_option with our override
-	 * @since  0.1.0
+	 * @since  0.1.3
 	 */
 	public function use_get_override( $test, $default = false ) {
 		return call_user_func( $this->get_option, $this->id(), $default );
@@ -84,7 +84,7 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 
 	/**
 	 * Replaces update_option with our override
-	 * @since  0.1.0
+	 * @since  0.1.3
 	 */
 	public function use_update_override( $test, $option_value ) {
 		return call_user_func( $this->update_option, $this->id(), $option_value );
@@ -92,7 +92,7 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 
 	/**
 	 * Returns term meta with options to return a subset
-	 * @since  0.1.0
+	 * @since  0.1.3
 	 * @param  string  $term_id  The term id for the options we're getting
 	 * @param  string  $key      Term meta key to check
 	 * @return mixed             Requested value | false
