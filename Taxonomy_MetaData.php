@@ -1,6 +1,6 @@
 <?php
 
-if ( ! class_exists( 'Taxonomy_MetaData' ) ) {
+if ( ! class_exists( 'Taxonomy_MetaData' ) ) :
 /**
  * Adds pseudo term meta functionality
  * @version 0.1.1
@@ -63,6 +63,27 @@ class Taxonomy_MetaData {
 	 * @var array
 	 */
 	protected $meta = array();
+
+	/**
+	 * Option getter function (can replace with wlo_get_option)
+	 * @since  0.1.1
+	 * @var array
+	 */
+	protected $get_option = 'get_option';
+
+	/**
+	 * Option updater function (can replace with wlo_update_option)
+	 * @since  0.1.1
+	 * @var array
+	 */
+	protected $update_option = 'update_option';
+
+	/**
+	 * Option deleter function (can replace with wlo_delete_option)
+	 * @since  0.1.1
+	 * @var array
+	 */
+	protected $delete_option = 'delete_option';
 
 	/**
 	 * Get Started
@@ -145,7 +166,7 @@ class Taxonomy_MetaData {
 		// Initiate ID
 		$this->id( $term_id );
 		// Get term meta
-		$data = get_option( $this->id() );
+		$data = call_user_func( $this->get_option, $this->id() );
 
 		// Add a title for these fields, if requested
 		if ( $this->section_title ) : ?>
@@ -225,7 +246,7 @@ class Taxonomy_MetaData {
 		$this->loop_fields( $_POST, array( $this, 'sanitize_field' ) );
 
 		// Save the field data
-		update_option( $this->id(), $this->sanitized );
+		call_user_func( $this->update_option, $this->id(), $this->sanitized );
 	}
 
 	/**
@@ -273,7 +294,7 @@ class Taxonomy_MetaData {
 	 * @param int $term_id      Term's ID
 	 */
 	public function delete_data( $term_id ) {
-		return delete_option( $this->id( $term_id ) );
+		return call_user_func( $this->delete_option, $this->id( $term_id ) );
 	}
 
 	/**
@@ -286,7 +307,7 @@ class Taxonomy_MetaData {
 		if ( isset( $this->meta[ $term_id ] ) )
 			return $this->meta[ $term_id ];
 
-		$this->meta[ $term_id ] = get_option( $this->id( $term_id ) );
+		$this->meta[ $term_id ] = call_user_func( $this->get_option, $this->id( $term_id ) );
 		return $this->meta[ $term_id ];
 	}
 
@@ -344,4 +365,4 @@ class Taxonomy_MetaData {
 
 }
 
-} // end class_exists check
+endif; // end class_exists check
