@@ -157,10 +157,18 @@ function cmb_taxonomy_meta_initiate() {
 		)
 	);
 
+	// (Recommneded) Use wp-large-options
+	require_once( 'wp-large-options/wp-large-options.php' );
+	$overrides = array(
+		'get_option'    => 'wlo_get_option',
+		'update_option' => 'wlo_update_option',
+		'delete_option' => 'wlo_delete_option',
+	);
+
 	/**
 	 * Instantiate our taxonomy meta class
 	 */
-	$cats = new Taxonomy_MetaData_CMB( 'category', $meta_box, __( 'Category Settings', 'taxonomy-metadata' ) );
+	$cats = new Taxonomy_MetaData_CMB( 'category', $meta_box, __( 'Category Settings', 'taxonomy-metadata' ), $overrides );
 }
 cmb_taxonomy_meta_initiate();
 ```
