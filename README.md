@@ -32,7 +32,7 @@ Originally inspired by [@williamsba](http://github.com/williamsba). Read his art
 
 function taxonomy_meta_initiate() {
 
-	require_once( 'Taxonomy_MetaData.php' );
+	require_once( 'Taxonomy_MetaData/Taxonomy_MetaData.php' );
 
 	/**
 	 * Instantiate our taxonomy meta class
@@ -81,8 +81,8 @@ function taxonomy_metadata_textarea( $field, $value ) {
 
 function taxonomy_meta_initiate() {
 
-	require_once( 'Taxonomy_MetaData.php' );
-	require_once( 'wp-large-options.php' );
+	require_once( 'Taxonomy_MetaData/Taxonomy_MetaData.php' );
+	require_once( 'wp-large-options/wp-large-options.php' );
 
 	// Form title
 	$title = __( 'Category Archive Options', 'taxonomy-metadata' );
@@ -118,7 +118,7 @@ taxonomy_meta_initiate();
 
 function cmb_taxonomy_meta_initiate() {
 
-	require_once( 'Taxonomy_MetaData_CMB.php' );
+	require_once( 'Taxonomy_MetaData/Taxonomy_MetaData_CMB.php' );
 
 	/**
 	 * Semi-standard CMB metabox/fields array
