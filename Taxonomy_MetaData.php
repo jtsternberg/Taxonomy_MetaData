@@ -185,9 +185,9 @@ class Taxonomy_MetaData {
 	 * Field view
 	 * @since  0.1.1
 	 * @param  array  $field Field config
-	 * @param  mixed  $data  Field value
+	 * @param  mixed  $value Field value
 	 */
-	public function render_field_view( $field, $data ) {
+	public function render_field_view( $field, $value ) {
 		$cb = isset( $field->render_cb ) && is_callable( $field->render_cb )
 			? $field->render_cb
 			: array( $this, 'text_input_view' );
@@ -198,7 +198,7 @@ class Taxonomy_MetaData {
 				<label for="<?php echo $field->id; ?>"><?php echo $field->name; ?></label>
 			</th>
 			<td>
-				<?php call_user_func( $cb, $field, $data, $field->id ); ?>
+				<?php call_user_func( $cb, $field, $value, $this ); ?>
 			</td>
 		</tr>
 		<?php
@@ -208,12 +208,12 @@ class Taxonomy_MetaData {
 	 * Default field input view
 	 * @since  0.1.1
 	 * @param  array  $field Field config
-	 * @param  mixed  $data  Field value
+	 * @param  mixed  $value Field value
 	 */
-	public function text_input_view( $field, $data ) {
-		echo '<input type="text" class="regular-text" name="', $field->id, '" id="', $field->id, '" value="', esc_attr( $data ), '" />';
-		if ( isset( $field->desc ) && $field->desc )
-			echo "\n<p class=\"description\">{$field->desc}</p>\n";
+	public function text_input_view( $field, $value ) {
+		$placeholder = isset( $field->placeholder ) ? 'placeholder="'. $field->placeholder .'"' : '';
+		$description = isset( $field->desc ) ? "\n<p class=\"description\">{$field->desc}</p>\n" : '';
+		printf( '<input %s type="text" class="regular-text" name="%s" id="%s" value="%s" />%s', $placeholder, $field->id, $field->id, esc_attr( $value ), $description );
 	}
 
 	/**
@@ -261,11 +261,11 @@ class Taxonomy_MetaData {
 	 * Sanitizes an input field
 	 * @since  0.1.1
 	 * @param  array  $field Field config
-	 * @param  mixed  $data  Field value
+	 * @param  mixed  $value Field value
 	 */
-	public function sanitize_field( $field, $data ) {
+	public function sanitize_field( $field, $value ) {
 		$cb = isset( $field->sanitize_cb ) && is_callable( $field->sanitize_cb ) ? $field->sanitize_cb : 'sanitize_text_field';
-		$this->sanitized[ $field->id ] = call_user_func( $cb, $data );
+		$this->sanitized[ $field->id ] = call_user_func( $cb, $value );
 	}
 
 	/**
@@ -327,10 +327,10 @@ class Taxonomy_MetaData {
 	 * @return mixed             Requested value | false
 	 */
 	public function get_meta( $term_id, $key = '' ) {
-		$data = $this->_get_meta( $term_id );
+		$value = $this->_get_meta( $term_id );
 		if ( $key )
-			return isset( $data[ $key ] ) ? $data[ $key ] : false;
-		return $data;
+			return isset( $value[ $key ] ) ? $value[ $key ] : false;
+		return $value;
 	}
 
 	/**
