@@ -193,7 +193,7 @@ class Taxonomy_MetaData {
 			: array( $this, 'text_input_view' );
 		$id = '_id_'. sanitize_html_class( $field->id );
 		?>
-		<tr id="<?php echo $id; ?>">
+		<tr id="<?php echo esc_attr( $id ); ?>">
 			<th>
 				<label for="<?php echo $field->id; ?>"><?php echo $field->name; ?></label>
 			</th>
@@ -211,9 +211,9 @@ class Taxonomy_MetaData {
 	 * @param  mixed  $value Field value
 	 */
 	public function text_input_view( $field, $value ) {
-		$placeholder = isset( $field->placeholder ) ? 'placeholder="'. $field->placeholder .'"' : '';
+		$placeholder = isset( $field->placeholder ) ? 'placeholder="'. esc_attr( $field->placeholder ) .'"' : '';
 		$description = isset( $field->desc ) ? "\n<p class=\"description\">{$field->desc}</p>\n" : '';
-		printf( '<input %s type="text" class="regular-text" name="%s" id="%s" value="%s" />%s', $placeholder, $field->id, $field->id, esc_attr( $value ), $description );
+		printf( '<input %s type="text" class="regular-text" name="%s" id="%s" value="%s" />%s', $placeholder, esc_attr( $field->id ), esc_attr( $field->id ), esc_attr( $value ), $description );
 	}
 
 	/**
