@@ -10,8 +10,8 @@ if ( ! class_exists( 'Taxonomy_MetaData_CMB' ) ) :
  */
 class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 
-	public function __construct( $taxonomy, $fields, $option_callbacks = array() ) {
-		parent::__construct( $taxonomy, $fields, '', $option_callbacks );
+	public function __construct( $taxonomy, $fields, $title, $option_callbacks = array() ) {
+		parent::__construct( $taxonomy, $fields, $title, $option_callbacks );
 	}
 
 	/**
@@ -32,7 +32,8 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 
 		// Add object id to the form for easy access
 		printf( '<input type="hidden" name="term_opt_name" value="%s">', $this->id( $term_id ) );
-
+		
+		echo '<h3 class="cmb_metabox_title">'.$this->section_title.'</h3>';
 		// Show cmb form
 		cmb_print_metabox( $meta_box, $this->id( $term_id ) );
 
