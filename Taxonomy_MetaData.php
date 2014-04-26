@@ -164,7 +164,7 @@ class Taxonomy_MetaData {
 	 */
 	public function display_form( $term_id ) {
 		// Get term meta
-		$data = call_user_func( $this->get_option, $this->id( $term_id ) );
+		$data = call_user_func( $this->get_option, $this->id() );
 
 		// Add a title for these fields, if requested
 		if ( $this->section_title ) : ?>
@@ -254,7 +254,7 @@ class Taxonomy_MetaData {
 		$this->loop_fields( $_POST, array( $this, 'sanitize_field' ) );
 
 		// Save the field data
-		call_user_func( $this->update_option, $this->id($term_id), $this->sanitized );
+		call_user_func( $this->update_option, $this->id(), $this->sanitized );
 	}
 
 	/**
@@ -274,11 +274,12 @@ class Taxonomy_MetaData {
 	 * @param  integer $term_id Optional, Term ID
 	 * @return string           Option key
 	 */
-	public function id( $term_id = 0, $generate = true ) {
+	public function id( $term_id = 0 ) {
 
-		if ($generate || (!$generate && $this->id == ""))
+		if ( ! $this->id ) {
 			$this->id = $term_id ? $this->id_base .'_'. $term_id : $this->id_base . '_setme';
-		
+		}
+
 		return $this->id;
 	}
 
@@ -343,40 +344,8 @@ class Taxonomy_MetaData {
 	public static function get( $taxonomy, $term_id, $key = '' ) {
 		// Get taxonomy instance
 		$instance = self::get_instance( $taxonomy );
-
-		$data = call_user_func( $instance->get_option, $instance->id($term_id) );
-
-		if ($key)
-			if (isset($data[$key]))
-				return $data[$key];
-			else
-				return false;
-		else
-			return $data;
-	}
-
-	/**
-	 * Public method for setting term meta
-	 * @since  0.1.0
-	 * @param  string $taxonomy T axonomy slug
-	 * @param  string $term_id   The ID of the term whose option we're setting
-	 * @param  string $key       Term meta key to set
-	 * @param  string $new_value Term value of meta key
-	 * @return mixed             true | false
-	 */
-	public static function set( $taxonomy, $term_id, $key, $new_value )
-	{
-		if (!$key)
-			return false;
-
-		$instance = self::get_instance( $taxonomy );
-
-		$data = call_user_func( $instance->get_option, $instance->id($term_id) );
-		$data[$key] = $new_value;
-
-		call_user_func( $instance->update_option, $instance->id($term_id), $data );
-
-		return true;
+		// Return the meta, or false if the taxonomy object doesn't exist
+		return $instance ? $instance->get_meta( $term_id, $key ) : false;
 	}
 
 	/**
