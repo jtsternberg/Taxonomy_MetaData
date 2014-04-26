@@ -56,7 +56,7 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 
 		$this->do_override_filters( $term_id );
 		// Save the metabox if it's been submitted
-		cmb_save_metabox_fields( $this->fields(), $this->id() );
+		cmb_save_metabox_fields( $this->fields(), $this->id($term_id) );
 	}
 
 	/**
@@ -79,7 +79,7 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 	 * @since  0.1.3
 	 */
 	public function use_get_override( $test, $default = false ) {
-		return call_user_func( $this->get_option, $this->id(), $default );
+		return call_user_func( $this->get_option, $this->id(0, false), $default );
 	}
 
 	/**
@@ -87,7 +87,7 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 	 * @since  0.1.3
 	 */
 	public function use_update_override( $test, $option_value ) {
-		return call_user_func( $this->update_option, $this->id(), $option_value );
+		return call_user_func( $this->update_option, $this->id(0, false), $option_value );
 	}
 
 	/**
