@@ -164,7 +164,7 @@ class Taxonomy_MetaData {
 	 */
 	public function display_form( $term_id ) {
 		// Get term meta
-		$data = call_user_func( $this->get_option, $this->id() );
+		$data = call_user_func( $this->get_option, $this->id( $term_id ) );
 
 		// Add a title for these fields, if requested
 		if ( $this->section_title ) : ?>
@@ -254,7 +254,7 @@ class Taxonomy_MetaData {
 		$this->loop_fields( $_POST, array( $this, 'sanitize_field' ) );
 
 		// Save the field data
-		call_user_func( $this->update_option, $this->id(), $this->sanitized );
+		call_user_func( $this->update_option, $this->id($term_id), $this->sanitized );
 	}
 
 	/**
@@ -274,8 +274,10 @@ class Taxonomy_MetaData {
 	 * @param  integer $term_id Optional, Term ID
 	 * @return string           Option key
 	 */
-	public function id( $term_id = 0 ) {
-		$this->id = $term_id ? $this->id_base .'_'. $term_id : $this->id_base . '_setme';
+	public function id( $term_id = 0, $generate = true ) {
+
+		if ($generate || (!$generate && $this->id == ""))
+			$this->id = $term_id ? $this->id_base .'_'. $term_id : $this->id_base . '_setme';
 		
 		return $this->id;
 	}
