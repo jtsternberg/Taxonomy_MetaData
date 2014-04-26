@@ -363,7 +363,7 @@ class Taxonomy_MetaData {
 	 * @param  string $term_id   The ID of the term whose option we're setting
 	 * @param  string $key       Term meta key to set
 	 * @param  string $new_value Term value of meta key
-	 * @return mixed             true | false
+	 * @return mixed             Requested value | false
 	 */
 	public static function set( $taxonomy, $term_id, $key, $new_value )
 	{
@@ -375,8 +375,8 @@ class Taxonomy_MetaData {
 		$data = call_user_func( $instance->get_option, $instance->id($term_id) );
 		$data[$key] = $new_value;
 
-		call_user_func( $instance->update_option, $instance->id($tem_id), $data );
-		
+		call_user_func( $instance->update_option, $instance->id($term_id), $data );
+
 		return true;
 	}
 
