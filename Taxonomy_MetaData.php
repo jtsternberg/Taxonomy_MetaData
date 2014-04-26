@@ -363,7 +363,7 @@ class Taxonomy_MetaData {
 	 * @param  string $term_id   The ID of the term whose option we're setting
 	 * @param  string $key       Term meta key to set
 	 * @param  string $new_value Term value of meta key
-	 * @return mixed             Requested value | false
+	 * @return mixed             true | false
 	 */
 	public static function set( $taxonomy, $term_id, $key, $new_value )
 	{
