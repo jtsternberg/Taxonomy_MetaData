@@ -10,8 +10,8 @@ if ( ! class_exists( 'Taxonomy_MetaData_CMB' ) ) :
  */
 class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 
-	public function __construct( $taxonomy, $fields, $title, $option_callbacks = array() ) {
-		parent::__construct( $taxonomy, $fields, $title, $option_callbacks );
+	public function __construct( $taxonomy, $fields, $option_callbacks = array() ) {
+		parent::__construct( $taxonomy, $fields, '', $option_callbacks );
 	}
 
 	/**
@@ -33,7 +33,6 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 		// Add object id to the form for easy access
 		printf( '<input type="hidden" name="term_opt_name" value="%s">', $this->id( $term_id ) );
 
-		echo '<h3 class="cmb_metabox_title">'.$this->section_title.'</h3>';
 		// Show cmb form
 		cmb_print_metabox( $meta_box, $this->id( $term_id ) );
 
@@ -57,7 +56,7 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 
 		$this->do_override_filters( $term_id );
 		// Save the metabox if it's been submitted
-		cmb_save_metabox_fields( $this->fields(), $this->id($term_id) );
+		cmb_save_metabox_fields( $this->fields(), $this->id() );
 	}
 
 	/**
@@ -80,7 +79,7 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 	 * @since  0.1.3
 	 */
 	public function use_get_override( $test, $default = false ) {
-		return call_user_func( $this->get_option, $this->id(0, false), $default );
+		return call_user_func( $this->get_option, $this->id(), $default );
 	}
 
 	/**
@@ -88,7 +87,7 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 	 * @since  0.1.3
 	 */
 	public function use_update_override( $test, $option_value ) {
-		return call_user_func( $this->update_option, $this->id(0, false), $option_value );
+		return call_user_func( $this->update_option, $this->id(), $option_value );
 	}
 
 	/**
