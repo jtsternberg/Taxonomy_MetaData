@@ -344,8 +344,40 @@ class Taxonomy_MetaData {
 	public static function get( $taxonomy, $term_id, $key = '' ) {
 		// Get taxonomy instance
 		$instance = self::get_instance( $taxonomy );
-		// Return the meta, or false if the taxonomy object doesn't exist
-		return $instance ? $instance->get_meta( $term_id, $key ) : false;
+
+		$data = call_user_func( $instance->get_option, $instance->id($term_id) );
+
+		if ($key)
+			if (isset($data[$key]))
+				return $data[$key];
+			else
+				return false;
+		else
+			return $data;
+	}
+
+	/**
+	 * Public method for setting term meta
+	 * @since  0.1.0
+	 * @param  string $taxonomy T axonomy slug
+	 * @param  string $term_id   The ID of the term whose option we're setting
+	 * @param  string $key       Term meta key to set
+	 * @param  string $new_value Term value of meta key
+	 * @return mixed             true | false
+	 */
+	public static function set( $taxonomy, $term_id, $key, $new_value )
+	{
+		if (!$key)
+			return false;
+
+		$instance = self::get_instance( $taxonomy );
+
+		$data = call_user_func( $instance->get_option, $instance->id($term_id) );
+		$data[$key] = $new_value;
+
+		call_user_func( $instance->update_option, $instance->id($tem_id), $data );
+		
+		return true;
 	}
 
 	/**
