@@ -275,11 +275,8 @@ class Taxonomy_MetaData {
 	 * @return string           Option key
 	 */
 	public function id( $term_id = 0 ) {
-
-		if ( ! $this->id ) {
-			$this->id = $term_id ? $this->id_base .'_'. $term_id : $this->id_base . '_setme';
-		}
-
+		$this->id = $term_id ? $this->id_base .'_'. $term_id : $this->id_base . '_setme';
+		
 		return $this->id;
 	}
 
