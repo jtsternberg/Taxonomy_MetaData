@@ -56,7 +56,7 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 
 		$this->do_override_filters( $term_id );
 		// Save the metabox if it's been submitted
-		cmb_save_metabox_fields( $this->fields(), $this->id() );
+		cmb_save_metabox_fields( $this->fields(), $this->id($term_id) );
 	}
 
 	/**
@@ -66,28 +66,16 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 	public function do_override_filters( $term_id ) {
 
 		// Override CMB's getter
-		add_filter( 'cmb_override_option_get_'. $this->id( $term_id ), array( $this, 'use_get_override' ), 10, 2 );
+		add_filter( 'cmb_override_option_get_'. $this->id( $term_id ), function ( $test, $default = false ) use ($term_id) {
+			return call_user_func( $this->get_option, $this->id($term_id), $default );
+		}, 10, 2 );
 		// Override CMB's setter
-		add_filter( 'cmb_override_option_save_'. $this->id( $term_id ), array( $this, 'use_update_override' ), 10, 2 );
+		add_filter( 'cmb_override_option_save_'. $this->id( $term_id ), function ( $test, $option_value ) use ($term_id) {
+			return call_user_func( $this->update_option, $this->id($term_id), $option_value );
+		}, 10, 2 );
 
 
 		$this->filters_added = true;
-	}
-
-	/**
-	 * Replaces get_option with our override
-	 * @since  0.1.3
-	 */
-	public function use_get_override( $test, $default = false ) {
-		return call_user_func( $this->get_option, $this->id(), $default );
-	}
-
-	/**
-	 * Replaces update_option with our override
-	 * @since  0.1.3
-	 */
-	public function use_update_override( $test, $option_value ) {
-		return call_user_func( $this->update_option, $this->id(), $option_value );
 	}
 
 	/**
