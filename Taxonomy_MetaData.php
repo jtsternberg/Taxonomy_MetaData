@@ -3,7 +3,7 @@
 if ( ! class_exists( 'Taxonomy_MetaData' ) ) :
 /**
  * Adds pseudo term meta functionality
- * @version 0.1.3
+ * @version 0.1.4
  * @author  Justin Sternberg
  */
 class Taxonomy_MetaData {
@@ -65,8 +65,8 @@ class Taxonomy_MetaData {
 	protected $meta = array();
 
 	/**
-	 * Cached ids for this taxonomy
-	 * @since  0.1.0
+	 * Cached Unique ID strings for each taxonomy term
+	 * @since  0.1.4
 	 * @var array
 	 */
 	protected $ids = array();
@@ -234,9 +234,9 @@ class Taxonomy_MetaData {
 		if ( ! current_user_can( $this->taxonomy_object()->cap->edit_terms ) )
 			return;
 
-		$this->id = ( false !== strpos( $_POST['term_opt_name'], 'setme' ) )
-			? $this->id = $this->id_base .'_'. $term_id
-			: $this->id( $term_id );
+		if ( false !== strpos( $_POST['term_opt_name'], 'setme' ) ) {
+			$this->ids[ $term_id ] = $this->id_base .'_'. $term_id;
+		}
 
 		$this->do_save( $term_id );
 	}
@@ -283,11 +283,11 @@ class Taxonomy_MetaData {
 	 */
 	public function id( $term_id = 0 ) {
 
-		if ( !isset($this->ids[$term_id]) ) {
-			$this->ids[$term_id] = $term_id ? $this->id_base .'_'. $term_id : $this->id_base . '_setme';
+		if ( ! isset( $this->ids[ $term_id ] ) ) {
+			$this->ids[ $term_id ] = $term_id ? $this->id_base .'_'. $term_id : $this->id_base . '_setme';
 		}
 
-		return $this->ids[$term_id];
+		return $this->ids[ $term_id ];
 	}
 
 	/**
