@@ -164,7 +164,7 @@ class Taxonomy_MetaData {
 	 */
 	public function display_form( $term_id ) {
 		// Get term meta
-		$data = call_user_func( $this->get_option, $this->id() );
+		$data = call_user_func( $this->get_option, $this->id($term_id) );
 
 		// Add a title for these fields, if requested
 		if ( $this->section_title ) : ?>
@@ -254,7 +254,7 @@ class Taxonomy_MetaData {
 		$this->loop_fields( $_POST, array( $this, 'sanitize_field' ) );
 
 		// Save the field data
-		call_user_func( $this->update_option, $this->id(), $this->sanitized );
+		call_user_func( $this->update_option, $this->id($term_id), $this->sanitized );
 	}
 
 	/**
