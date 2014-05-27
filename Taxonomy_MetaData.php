@@ -51,13 +51,6 @@ class Taxonomy_MetaData {
 	protected $id_base = '';
 
 	/**
-	 * Unique ID string for each taxonomy term
-	 * @since  0.1.0
-	 * @var string
-	 */
-	protected $id = '';
-
-	/**
 	 * Cached option/meta data for this taxonomy
 	 * @since  0.1.0
 	 * @var array
