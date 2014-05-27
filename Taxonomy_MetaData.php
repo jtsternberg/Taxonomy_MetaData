@@ -65,6 +65,13 @@ class Taxonomy_MetaData {
 	protected $meta = array();
 
 	/**
+	 * Cached ids for this taxonomy
+	 * @since  0.1.0
+	 * @var array
+	 */
+	protected $ids = array();
+
+	/**
 	 * Get Started
 	 * @since  0.1.0
 	 */
@@ -276,11 +283,11 @@ class Taxonomy_MetaData {
 	 */
 	public function id( $term_id = 0 ) {
 
-		if ( ! $this->id ) {
-			$this->id = $term_id ? $this->id_base .'_'. $term_id : $this->id_base . '_setme';
+		if ( !isset($this->ids[$term_id]) ) {
+			$this->ids[$term_id] = $term_id ? $this->id_base .'_'. $term_id : $this->id_base . '_setme';
 		}
 
-		return $this->id;
+		return $this->ids[$term_id];
 	}
 
 	/**
