@@ -51,18 +51,18 @@ class Taxonomy_MetaData {
 	protected $id_base = '';
 
 	/**
+	 * Unique ID string for each taxonomy term
+	 * @since  0.1.0
+	 * @var string
+	 */
+	protected $id = '';
+
+	/**
 	 * Cached option/meta data for this taxonomy
 	 * @since  0.1.0
 	 * @var array
 	 */
 	protected $meta = array();
-
-	/**
-	 * Cached Unique ID strings for each taxonomy term
-	 * @since  0.1.4
-	 * @var array
-	 */
-	protected $ids = array();
 
 	/**
 	 * Get Started
@@ -195,7 +195,7 @@ class Taxonomy_MetaData {
 		?>
 		<tr id="<?php echo esc_attr( $id ); ?>">
 			<th>
-				<label for="<?php echo $field->id; ?>"><?php echo $field->name; ?></label>
+				<label for="<?php echo $field->id; ?>"><?php echo $field->label; ?></label>
 			</th>
 			<td>
 				<?php call_user_func( $cb, $field, $value, $this ); ?>
@@ -227,9 +227,9 @@ class Taxonomy_MetaData {
 		if ( ! current_user_can( $this->taxonomy_object()->cap->edit_terms ) )
 			return;
 
-		if ( false !== strpos( $_POST['term_opt_name'], 'setme' ) ) {
-			$this->ids[ $term_id ] = $this->id_base .'_'. $term_id;
-		}
+		$this->id = ( false !== strpos( $_POST['term_opt_name'], 'setme' ) )
+			? $this->id = $this->id_base .'_'. $term_id
+			: $this->id( $term_id );
 
 		$this->do_save( $term_id );
 	}
@@ -276,11 +276,11 @@ class Taxonomy_MetaData {
 	 */
 	public function id( $term_id = 0 ) {
 
-		if ( ! isset( $this->ids[ $term_id ] ) ) {
-			$this->ids[ $term_id ] = $term_id ? $this->id_base .'_'. $term_id : $this->id_base . '_setme';
+		if ( ! $this->id || $term_id ) {
+			$this->id = $term_id ? $this->id_base .'_'. $term_id : $this->id_base . '_setme';
 		}
 
-		return $this->ids[ $term_id ];
+		return $this->id;
 	}
 
 	/**
@@ -312,8 +312,9 @@ class Taxonomy_MetaData {
 	 * @return mixed             Option value
 	 */
 	public function _get_meta( $term_id ) {
-		if ( isset( $this->meta[ $term_id ] ) )
+		if ( isset( $this->meta[ $term_id ] ) ) {
 			return $this->meta[ $term_id ];
+		}
 
 		$this->meta[ $term_id ] = call_user_func( $this->get_option, $this->id( $term_id ) );
 		return $this->meta[ $term_id ];
