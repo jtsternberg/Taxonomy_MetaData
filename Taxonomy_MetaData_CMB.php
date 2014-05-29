@@ -5,12 +5,23 @@ require_once( 'Taxonomy_MetaData.php' );
 if ( ! class_exists( 'Taxonomy_MetaData_CMB' ) ) :
 /**
  * Adds pseudo term meta functionality
- * @version 0.1.3
+ * @version 0.1.4
  * @author  Justin Sternberg
  */
 class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 
-	public function __construct( $taxonomy, $fields, $option_callbacks = array() ) {
+	public function __construct( $taxonomy, $fields, $title = '', $option_callbacks = array() ) {
+
+		// If a title was passed in
+		if ( $title ) {
+			// Then add a title field to the list of fields for CMB
+			array_unshift( $fields['fields'], array(
+				'name' => $title,
+				'id'   => sanitize_title( $title ),
+				'type' => 'title',
+			) );
+		}
+
 		parent::__construct( $taxonomy, $fields, '', $option_callbacks );
 	}
 
@@ -100,6 +111,9 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 	public function get_meta( $term_id, $key = '' ) {
 		if ( ! class_exists( 'cmb_Meta_Box' ) )
 			return;
+
+		$this->do_override_filters( $term_id );
+
 		return cmb_get_option( $this->id( $term_id ), $key );
 	}
 
