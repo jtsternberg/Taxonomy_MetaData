@@ -227,7 +227,7 @@ class Taxonomy_MetaData {
 		if ( ! current_user_can( $this->taxonomy_object()->cap->edit_terms ) )
 			return;
 
-		$this->id = ( false !== strpos( $_POST['term_opt_name'], 'setme' ) )
+		$this->id = ( isset( $_POST['term_opt_name'] ) && false !== strpos( $_POST['term_opt_name'], 'setme' ) )
 			? $this->id = $this->id_base .'_'. $term_id
 			: $this->id( $term_id );
 
