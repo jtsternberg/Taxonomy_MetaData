@@ -20,12 +20,6 @@ Originally inspired by [@williamsba](http://github.com/williamsba). Read his art
 	Taxonomy_MetaData::get( 'category', 3, 'about_text' );
 	```
 
-* Set specific term meta data:
-	```php
-	$new_value = true;
-	Taxonomy_MetaData::set( 'category', 3, 'about_text', $new_value );
-	```
-
 #### To initate Taxonomy_MetaData and add fields to a taxonomy:
 ```php
 <?php
