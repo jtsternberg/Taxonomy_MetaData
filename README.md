@@ -151,7 +151,7 @@ function cmb_taxonomy_meta_initiate() {
 		)
 	);
 
-	// (Recommneded) Use wp-large-options
+	// (Recommended) Use wp-large-options
 	require_once( 'wp-large-options/wp-large-options.php' );
 	$overrides = array(
 		'get_option'    => 'wlo_get_option',
