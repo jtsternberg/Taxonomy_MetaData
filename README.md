@@ -168,3 +168,18 @@ function cmb2_taxonomy_meta_initiate() {
 }
 cmb2_taxonomy_meta_initiate();
 ```
+
+#### Changelog
+
+* 0.2.0
+	* Make CMB extended class use CMB2 instead.
+
+* 0.1.4
+	* Fix Taxonomy_MetaData_CMB title parameters now work and fixed get_meta to work properly.
+	* Fix term ID not returned correctly
+
+* 0.1.3
+	* Add CMB extended class
+
+* 1.0.0
+	* Hello World!

@@ -5,7 +5,7 @@ require_once( 'Taxonomy_MetaData.php' );
 if ( ! class_exists( 'Taxonomy_MetaData_CMB2' ) ) :
 /**
  * Adds pseudo term meta functionality
- * @version 0.1.4
+ * @version 0.2.0
  * @author  Justin Sternberg
  */
 class Taxonomy_MetaData_CMB2 extends Taxonomy_MetaData {
