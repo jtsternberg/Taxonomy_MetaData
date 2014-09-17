@@ -2,27 +2,29 @@
 
 require_once( 'Taxonomy_MetaData.php' );
 
-if ( ! class_exists( 'Taxonomy_MetaData_CMB' ) ) :
+if ( ! class_exists( 'Taxonomy_MetaData_CMB2' ) ) :
 /**
  * Adds pseudo term meta functionality
  * @version 0.1.4
  * @author  Justin Sternberg
  */
-class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
+class Taxonomy_MetaData_CMB2 extends Taxonomy_MetaData {
 
-	public function __construct( $taxonomy, $fields, $title = '', $option_callbacks = array() ) {
+	public function __construct( $taxonomy, $metabox, $title = '', $option_callbacks = array() ) {
+
+		$this->metabox = $metabox;
 
 		// If a title was passed in
 		if ( $title ) {
 			// Then add a title field to the list of fields for CMB
-			array_unshift( $fields['fields'], array(
+			array_unshift( $metabox['fields'], array(
 				'name' => $title,
 				'id'   => sanitize_title( $title ),
 				'type' => 'title',
 			) );
 		}
 
-		parent::__construct( $taxonomy, $fields, '', $option_callbacks );
+		parent::__construct( $taxonomy, $metabox, '', $option_callbacks );
 	}
 
 	/**
@@ -31,22 +33,34 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 	 * @param  int  $term_id Term ID
 	 */
 	public function display_form( $term_id ) {
-		if ( ! class_exists( 'cmb_Meta_Box' ) )
+		if ( ! class_exists( 'CMB2' ) ) {
 			return;
+		}
 		$this->do_override_filters( $term_id );
 
-		// Fill in the mb defaults
-		$meta_box = cmb_Meta_Box::set_mb_defaults( $this->fields() );
+		$object_id = $this->id( $term_id );
+		$cmb = cmb2_get_metabox( $this->metabox, $object_id );
 
-		// Make sure that our object type is explicitly set by the metabox config
-		cmb_Meta_Box::set_object_type( cmb_Meta_Box::set_mb_type( $meta_box ) );
+		// if passing a metabox ID, and that ID was not found
+		if ( ! $cmb ) {
+			return;
+		}
+
+		// Hard-code object type
+		$cmb->object_type( 'options-page' );
+
+		// Enqueue JS/CSS
+		if ( $cmb->prop( 'cmb_styles' ) ) {
+			CMB2_hookup::enqueue_cmb_css();
+		}
+		CMB2_hookup::enqueue_cmb_js();
 
 		// Add object id to the form for easy access
-		printf( '<input type="hidden" name="term_opt_name" value="%s">', $this->id( $term_id ) );
+		printf( '<input type="hidden" name="term_opt_name" value="%s">', $object_id );
+		printf( '<input type="hidden" name="object_id" value="%s">', $object_id );
 
 		// Show cmb form
-		cmb_print_metabox( $meta_box, $this->id( $term_id ) );
-
+		$cmb->show_form();
 	}
 
 	/**
@@ -55,19 +69,23 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 	 * @param  int $term_id Term's ID
 	 */
 	public function do_save( $term_id ) {
-		if ( ! class_exists( 'cmb_Meta_Box' ) )
+
+		if ( ! class_exists( 'CMB2' ) ) {
 			return;
+		}
+
+		$object_id = $this->id( $term_id );
+		$cmb = cmb2_get_metabox( $this->metabox, $object_id );
 
 		if (
 			// check nonce
-			! isset( $_POST['term_opt_name'], $_POST['wp_meta_box_nonce'], $_POST['action'] )
-			|| ! wp_verify_nonce( $_POST['wp_meta_box_nonce'], cmb_Meta_Box::nonce() )
-		)
-			return;
+			isset( $_POST[ $cmb->nonce() ] )
+			&& wp_verify_nonce( $_POST[ $cmb->nonce() ], $cmb->nonce() )
+		) {
 
-		$this->do_override_filters( $term_id );
-		// Save the metabox if it's been submitted
-		cmb_save_metabox_fields( $this->fields(), $this->id() );
+			$this->do_override_filters( $term_id );
+			$cmb->save_fields( $object_id, 'options-page', $_POST );
+		}
 	}
 
 	/**
@@ -77,9 +95,9 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 	public function do_override_filters( $term_id ) {
 
 		// Override CMB's getter
-		add_filter( 'cmb_override_option_get_'. $this->id( $term_id ), array( $this, 'use_get_override' ), 10, 2 );
+		add_filter( 'cmb2_override_option_get_'. $this->id( $term_id ), array( $this, 'use_get_override' ), 10, 2 );
 		// Override CMB's setter
-		add_filter( 'cmb_override_option_save_'. $this->id( $term_id ), array( $this, 'use_update_override' ), 10, 2 );
+		add_filter( 'cmb2_override_option_save_'. $this->id( $term_id ), array( $this, 'use_update_override' ), 10, 2 );
 
 
 		$this->filters_added = true;
@@ -114,7 +132,7 @@ class Taxonomy_MetaData_CMB extends Taxonomy_MetaData {
 
 		$this->do_override_filters( $term_id );
 
-		return cmb_get_option( $this->id( $term_id ), $key );
+		return cmb2_get_option( $this->id( $term_id ), $key );
 	}
 
 }

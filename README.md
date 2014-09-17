@@ -3,7 +3,7 @@ Taxonomy_MetaData
 
 WordPress Helper Class for saving pseudo-metadata for taxonomy terms. This is not recommend if using on a very large number of terms, UNLESS using a plugin like [wp-large-options](https://github.com/voceconnect/wp-large-options/). The third parameter is used to override the get/set/delete options callbacks so that you can use [wp-large-options](https://github.com/voceconnect/wp-large-options/) (or something like it).
 
-Includes an extended class for using [CMB](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress) to generate the actual form fields. This is handy if you need more advanced fields, or do not want to create your own field `render_cb`s.
+Includes an extended class for using [CMB2](https://github.com/WebDevStudios/CMB2) to generate the actual form fields. This is handy if you need more advanced fields, or do not want to create your own field `render_cb`s.
 
 Originally inspired by [@williamsba](http://github.com/williamsba). Read his article here: [How To: Save Taxonomy Meta Data as an Options Array in WordPress](http://strangework.com/2010/07/01/how-to-save-taxonomy-meta-data-as-an-options-array-in-wordpress/).
 
@@ -106,19 +106,21 @@ function taxonomy_meta_initiate() {
 taxonomy_meta_initiate();
 ```
 
-#### To use Taxonomy_MetaData with [Custom Metaboxes and Fields](https://github.com/WebDevStudios/Custom-Metaboxes-and-Fields-for-WordPress):
+#### To use Taxonomy_MetaData with [CMB2](https://github.com/WebDevStudios/CMB2):
 ```php
 <?php
 
-function cmb_taxonomy_meta_initiate() {
+function cmb2_taxonomy_meta_initiate() {
 
-	require_once( 'Taxonomy_MetaData/Taxonomy_MetaData_CMB.php' );
+	require_once( 'CMB2/init.php' );
+	require_once( 'Taxonomy_MetaData/Taxonomy_MetaData_CMB2.php' );
 
 	/**
-	 * Semi-standard CMB metabox/fields array
+	 * Semi-standard CMB2 metabox/fields array
 	 */
 	$meta_box = array(
 		'id'         => 'cat_options',
+		// 'key' and 'value' should be exactly as follows
 		'show_on'    => array( 'key' => 'options-page', 'value' => array( 'unknown', ), ),
 		'show_names' => true, // Show field names on the left
 		'fields'     => array(
@@ -162,7 +164,7 @@ function cmb_taxonomy_meta_initiate() {
 	/**
 	 * Instantiate our taxonomy meta class
 	 */
-	$cats = new Taxonomy_MetaData_CMB( 'category', $meta_box, __( 'Category Settings', 'taxonomy-metadata' ), $overrides );
+	$cats = new Taxonomy_MetaData_CMB2( 'category', $meta_box, __( 'Category Settings', 'taxonomy-metadata' ), $overrides );
 }
-cmb_taxonomy_meta_initiate();
+cmb2_taxonomy_meta_initiate();
 ```
