@@ -168,7 +168,7 @@ class Taxonomy_MetaData {
 
 		// Add a title for these fields, if requested
 		if ( $this->section_title ) : ?>
-		<h3 class="cmb_metabox_title"><?php echo $this->section_title; ?></h3>
+		<h3 class="cmb-metabox-title"><?php echo $this->section_title; ?></h3>
 		<?php endif; ?>
 		<input type="hidden" name="term_opt_name" value="<?php echo $this->id( $term_id ); ?>">
 		<?php wp_nonce_field( 'term_meta_box_nonce', 'term_meta_box_nonce', false, true ); ?>
@@ -224,8 +224,9 @@ class Taxonomy_MetaData {
 	public function save_data( $term_id ) {
 
 		// Can the user edit this term?
-		if ( ! current_user_can( $this->taxonomy_object()->cap->edit_terms ) )
+		if ( ! current_user_can( $this->taxonomy_object()->cap->edit_terms ) ) {
 			return;
+		}
 
 		$this->id = ( isset( $_POST['term_opt_name'] ) && false !== strpos( $_POST['term_opt_name'], 'setme' ) )
 			? $this->id = $this->id_base .'_'. $term_id
