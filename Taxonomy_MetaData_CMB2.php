@@ -127,7 +127,7 @@ class Taxonomy_MetaData_CMB2 extends Taxonomy_MetaData {
 	 * @return mixed             Requested value | false
 	 */
 	public function get_meta( $term_id, $key = '' ) {
-		if ( ! class_exists( 'cmb_Meta_Box' ) )
+		if ( ! class_exists( 'CMB2' ) )
 			return;
 
 		$this->do_override_filters( $term_id );
