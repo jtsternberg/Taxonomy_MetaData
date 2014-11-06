@@ -12,12 +12,17 @@ Originally inspired by [@williamsba](http://github.com/williamsba). Read his art
 
 * Get all meta for a taxonomy term:
 	```php
-	Taxonomy_MetaData::get( 'category', 3 );
+	$taxonomy = 'category';
+	$term_id = 3;
+	Taxonomy_MetaData::get( $taxonomy, $term_id );
 	```
 
 * Get specific term meta data:
 	```php
-	Taxonomy_MetaData::get( 'category', 3, 'about_text' );
+	$taxonomy = 'category';
+	$term_id = 3;
+	$meta_key = 'about_text';
+	Taxonomy_MetaData::get( $taxonomy, $term_id, $meta_key );
 	```
 
 #### To initate Taxonomy_MetaData and add fields to a taxonomy:
