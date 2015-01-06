@@ -176,6 +176,9 @@ cmb2_taxonomy_meta_initiate();
 
 #### Changelog
 
+* 0.2.1
+	* Make Taxonomy_MetaData::get() work the same way when using CMB2 version, aka, return all options for a term if no key is provided.
+
 * 0.2.0
 	* Make CMB extended class use CMB2 instead.
 

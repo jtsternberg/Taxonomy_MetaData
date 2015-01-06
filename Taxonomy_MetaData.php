@@ -3,7 +3,7 @@
 if ( ! class_exists( 'Taxonomy_MetaData' ) ) :
 /**
  * Adds pseudo term meta functionality
- * @version 0.2.0
+ * @version 0.2.1
  * @author  Justin Sternberg
  */
 class Taxonomy_MetaData {

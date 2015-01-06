@@ -5,7 +5,7 @@ require_once( 'Taxonomy_MetaData.php' );
 if ( ! class_exists( 'Taxonomy_MetaData_CMB2' ) ) :
 /**
  * Adds pseudo term meta functionality
- * @version 0.2.0
+ * @version 0.2.1
  * @author  Justin Sternberg
  */
 class Taxonomy_MetaData_CMB2 extends Taxonomy_MetaData {
@@ -132,7 +132,11 @@ class Taxonomy_MetaData_CMB2 extends Taxonomy_MetaData {
 
 		$this->do_override_filters( $term_id );
 
-		return cmb2_get_option( $this->id( $term_id ), $key );
+		$value = $key
+			? cmb2_get_option( $this->id( $term_id ), $key )
+			: cmb2_options( $this->id( $term_id ) )->get_options();
+
+		return $value;
 	}
 
 }
