@@ -123,7 +123,8 @@ class Taxonomy_MetaData {
 
 		// Display our form data
 		add_action( $this->taxonomy .'_edit_form', array( $this, 'metabox_edit' ), 8, 2 );
-		add_action( $this->taxonomy .'_add_form_fields', array( $this, 'metabox_edit' ), 8, 2 );
+		if( apply_filters( 'taxonomy_metadata_display_on_' . $this->taxonomy . '_add_form', true ) )
+			add_action( $this->taxonomy .'_add_form_fields', array( $this, 'metabox_edit' ), 8, 2 );
 
 		// Save our form data
 		add_action( 'created_'. $this->taxonomy, array( $this, 'save_data' ) );
