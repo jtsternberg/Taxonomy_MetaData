@@ -3,7 +3,7 @@
 if ( ! class_exists( 'Taxonomy_MetaData' ) ) :
 /**
  * Adds pseudo term meta functionality
- * @version 0.2.1
+ * @version 0.2.2
  * @author  Justin Sternberg
  */
 class Taxonomy_MetaData {
@@ -122,17 +122,19 @@ class Taxonomy_MetaData {
 	public function hooks() {
 
 		// Display our form data
-		add_action( $this->taxonomy .'_edit_form', array( $this, 'metabox_edit' ), 8, 2 );
-		if( apply_filters( 'taxonomy_metadata_display_on_' . $this->taxonomy . '_add_form', true ) )
-			add_action( $this->taxonomy .'_add_form_fields', array( $this, 'metabox_edit' ), 8, 2 );
+		add_action( "{$this->taxonomy}_edit_form", array( $this, 'metabox_edit' ), 8, 2 );
+
+		// Display form in add-new section (unless specified not to)
+		if ( apply_filters( "taxonomy_metadata_display_on_{$this->taxonomy}_add_form", true ) ) {
+			add_action( "{$this->taxonomy}_add_form_fields", array( $this, 'metabox_edit' ), 8, 2 );
+		}
 
 		// Save our form data
-		add_action( 'created_'. $this->taxonomy, array( $this, 'save_data' ) );
-		add_action( 'edited_'. $this->taxonomy, array( $this, 'save_data' ) );
+		add_action( "created_{$this->taxonomy}", array( $this, 'save_data' ) );
+		add_action( "edited_{$this->taxonomy}", array( $this, 'save_data' ) );
 
 		// Delete it if necessary
-		add_action( 'delete_'. $this->taxonomy, array( $this, 'delete_data' ) );
-
+		add_action( "delete_{$this->taxonomy}", array( $this, 'delete_data' ) );
 	}
 
 	/**

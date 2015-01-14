@@ -176,6 +176,9 @@ cmb2_taxonomy_meta_initiate();
 
 #### Changelog
 
+* 0.2.2
+	* Add filter to disable form in taxonomy add-new section. [Props @billerickson](https://github.com/jtsternberg/Taxonomy_MetaData/pull/20).
+
 * 0.2.1
 	* Make Taxonomy_MetaData::get() work the same way when using CMB2 version, aka, return all options for a term if no key is provided.
 
