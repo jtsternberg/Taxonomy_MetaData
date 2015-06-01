@@ -1,9 +1,41 @@
 <?php
+/**
+ * @category     WordPress_Plugin
+ * @package      Taxonomy_MetaData
+ * @author       Jtsternberg
+ * @license      GPL-2.0+
+ * @link         https://github.com/jtsternberg/Taxonomy_MetaData
+ *
+ * Plugin Name:  Taxonomy_MetaData
+ * Plugin URI:   https://github.com/jtsternberg/Taxonomy_MetaData
+ * Description:  Taxonomy_MetaData is a Helper Class for WordPress developers for saving pseudo-metadata for taxonomy terms. Recommended to combine with wp-large-options.
+ * Author:       Jtsternberg
+ * Author URI:   http://jtsternberg.com/about
+ * Version:      1.0.0
+ *
+ * Released under the GPL license
+ * http://www.opensource.org/licenses/gpl-license.php
+ *
+ * This is an add-on for WordPress
+ * http://wordpress.org/
+ *
+ * **********************************************************************
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ * **********************************************************************
+ */
 
 if ( ! class_exists( 'Taxonomy_MetaData' ) ) :
 /**
  * Adds pseudo term meta functionality
- * @version 0.2.2
+ * @version 1.0.0
  * @author  Justin Sternberg
  */
 class Taxonomy_MetaData {
