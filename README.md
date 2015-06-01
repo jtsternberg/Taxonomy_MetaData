@@ -80,8 +80,10 @@ function taxonomy_metadata_textarea( $field, $value ) {
 
 function taxonomy_meta_initiate() {
 
-	require_once( 'Taxonomy_MetaData/Taxonomy_MetaData.php' );
-	require_once( 'wp-large-options/wp-large-options.php' );
+	// Including Taxonomy_MetaData .php. Update to reflect your file structure
+	if ( ! class_exists( 'Taxonomy_MetaData' ) ) {
+		require_once( 'Taxonomy_MetaData/Taxonomy_MetaData.php' );
+	}
 
 	// Form title
 	$title = __( 'Category Archive Options', 'taxonomy-metadata' );
@@ -95,8 +97,13 @@ function taxonomy_meta_initiate() {
 		),
 	);
 
+	// (Recommended) Use wp-large-options
+	if ( ! defined( 'wlo_update_option' ) ) {
+		require_once( 'wp-large-options/wp-large-options.php' );
+	}
+
 	// get/set/delete overrides using wp-large-options
-	$overrides = array(
+	$wlo_overrides = array(
 		'get_option'    => 'wlo_get_option',
 		'update_option' => 'wlo_update_option',
 		'delete_option' => 'wlo_delete_option',
@@ -106,7 +113,6 @@ function taxonomy_meta_initiate() {
 	 * Instantiate our taxonomy meta object
 	 */
 	new Taxonomy_MetaData( 'category', $fields, $title, $overrides );
-
 }
 taxonomy_meta_initiate();
 ```
@@ -115,52 +121,63 @@ taxonomy_meta_initiate();
 ```php
 <?php
 
-function cmb2_taxonomy_meta_initiate() {
+// Including CMB2's init file (unless you have CMB2 installed as a plugin)
+require_once( 'CMB2/init.php' );
 
-	require_once( 'CMB2/init.php' );
-	require_once( 'Taxonomy_MetaData/Taxonomy_MetaData_CMB2.php' );
+function taxonomy_metadata_cmb2_init() {
+
+	// Including Taxonomy_MetaData_CMB2.php. Update to reflect your file structure
+	if ( ! class_exists( 'Taxonomy_MetaData_CMB2' ) ) {
+		require_once( 'Taxonomy_MetaData/Taxonomy_MetaData_CMB2.php' );
+	}
+
+	$metabox_id = 'cat_options';
 
 	/**
-	 * Semi-standard CMB2 metabox/fields array
+	 * Semi-standard CMB metabox/fields registration
 	 */
-	$meta_box = array(
-		'id'         => 'cat_options',
-		// 'key' and 'value' should be exactly as follows
-		'show_on'    => array( 'key' => 'options-page', 'value' => array( 'unknown', ), ),
-		'show_names' => true, // Show field names on the left
-		'fields'     => array(
-			array(
-				'name' => __( 'Category Archive Featured Post', 'taxonomy-metadata' ),
-				'desc' => __( 'Enter Post ID', 'taxonomy-metadata' ),
-				'id'   => 'feat_post', // no prefix needed since the options are one option array.
-				'type' => 'text',
-			),
-			array(
-				'name' => __( 'Test Checkbox', 'taxonomy-metadata' ),
-				'desc' => __( 'field description (optional)', 'taxonomy-metadata' ),
-				'id'   => 'test_checkbox',
-				'type' => 'checkbox',
-			),
- 			array(
-				'name' => __( 'Test Text Small', 'taxonomy-metadata' ),
-				'desc' => __( 'field description (optional)', 'taxonomy-metadata' ),
-				'id'   => 'test_textsmall',
-				'type' => 'text_small',
-				// 'repeatable' => true,
-			),
-			array(
-				'name'    => __( 'Test wysiwyg', 'taxonomy-metadata' ),
-				'desc'    => __( 'field description (optional)', 'taxonomy-metadata' ),
-				'id'      => 'test_wysiwyg',
-				'type'    => 'wysiwyg',
-				'options' => array( 'textarea_rows' => 5, ),
-			),
-		)
-	);
+	$cmb = new_cmb2_box( array(
+		'id'           => $metabox_id,
+		'object_types' => array( 'key' => 'options-page', 'value' => array( 'unknown', ), ),
+	) );
+
+	$cmb->add_field( array(
+		'name' => __( 'Category Archive Featured Post', 'taxonomy-metadata' ),
+		'desc' => __( 'Enter Post ID', 'taxonomy-metadata' ),
+		'id'   => 'feat_post', // no prefix needed since the options are one option array.
+		'type' => 'text',
+	) );
+
+	$cmb->add_field( array(
+		'name' => __( 'Test Checkbox', 'taxonomy-metadata' ),
+		'desc' => __( 'field description (optional)', 'taxonomy-metadata' ),
+		'id'   => 'test_checkbox',
+		'type' => 'checkbox',
+	) );
+
+	$cmb->add_field( array(
+		'name' => __( 'Test Text Small', 'taxonomy-metadata' ),
+		'desc' => __( 'field description (optional)', 'taxonomy-metadata' ),
+		'id'   => 'test_textsmall',
+		'type' => 'text_small',
+		// 'repeatable' => true,
+	) );
+
+	$cmb->add_field( array(
+		'name'    => __( 'Test wysiwyg', 'taxonomy-metadata' ),
+		'desc'    => __( 'field description (optional)', 'taxonomy-metadata' ),
+		'id'      => 'test_wysiwyg',
+		'type'    => 'wysiwyg',
+		'options' => array( 'textarea_rows' => 5, ),
+	) );
 
 	// (Recommended) Use wp-large-options
-	require_once( 'wp-large-options/wp-large-options.php' );
-	$overrides = array(
+	if ( ! defined( 'wlo_update_option' ) ) {
+		require_once( 'wp-large-options/wp-large-options.php' );
+	}
+
+	// wp-large-options overrides
+	$wlo_overrides = array(
 		'get_option'    => 'wlo_get_option',
 		'update_option' => 'wlo_update_option',
 		'delete_option' => 'wlo_delete_option',
@@ -169,12 +186,16 @@ function cmb2_taxonomy_meta_initiate() {
 	/**
 	 * Instantiate our taxonomy meta class
 	 */
-	$cats = new Taxonomy_MetaData_CMB2( 'category', $meta_box, __( 'Category Settings', 'taxonomy-metadata' ), $overrides );
+	$cats = new Taxonomy_MetaData_CMB2( 'category', $metabox_id, __( 'Category Settings', 'taxonomy-metadata' ), $wlo_overrides );
 }
-cmb2_taxonomy_meta_initiate();
+add_action( 'cmb2_init', 'taxonomy_metadata_cmb2_init' );
 ```
 
 #### Changelog
+
+* 1.0.0
+	* Update `Taxonomy_MetaData_CMB2` to use new CMB2 API for adding metaboxes/fields, and update `display_form` to closer mimic `cmb2_print_metabox_form`. Also update readme to demonstrate.
+	* Add WordPress plugin headers so library can be installed as a plugin.
 
 * 0.2.2
 	* Add filter to disable form in taxonomy add-new section. [Props @billerickson](https://github.com/jtsternberg/Taxonomy_MetaData/pull/20).
