@@ -1,30 +1,59 @@
 <?php
+/**
+ * @category     WordPress_Plugin
+ * @package      Taxonomy_MetaData
+ * @author       Jtsternberg
+ * @license      GPL-2.0+
+ * @link         https://github.com/jtsternberg/Taxonomy_MetaData
+ */
 
 require_once( 'Taxonomy_MetaData.php' );
 
 if ( ! class_exists( 'Taxonomy_MetaData_CMB2' ) ) :
 /**
  * Adds pseudo term meta functionality
- * @version 0.2.1
+ * @version 1.0.0
  * @author  Justin Sternberg
  */
 class Taxonomy_MetaData_CMB2 extends Taxonomy_MetaData {
 
+	/**
+	 * CMB2 Object
+	 *
+	 * @var CMB2
+	 */
+	protected $cmb = null;
+
+	/**
+	 * Initiate CMB2 Taxonomy Meta
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param string  $taxonomy          Taxonomy Slug
+	 * @param mixed   $meta_box  Metabox config array or Metabox ID
+	 * @param string  $title             Optional section title
+	 * @param array   $option_callbacks  Override the option setting/getting
+	 */
 	public function __construct( $taxonomy, $metabox, $title = '', $option_callbacks = array() ) {
 
-		$this->metabox = $metabox;
+		$this->cmb = cmb2_get_metabox( $metabox );
+
+		// if passing a metabox ID, and that ID was not found
+		if ( ! $this->cmb ) {
+			return;
+		}
 
 		// If a title was passed in
 		if ( $title ) {
 			// Then add a title field to the list of fields for CMB
-			array_unshift( $metabox['fields'], array(
+			$this->cmb->add_field( array(
 				'name' => $title,
 				'id'   => sanitize_title( $title ),
 				'type' => 'title',
-			) );
+			), 1 );
 		}
 
-		parent::__construct( $taxonomy, $metabox, '', $option_callbacks );
+		parent::__construct( $taxonomy, array(), '', $option_callbacks );
 	}
 
 	/**
@@ -36,31 +65,32 @@ class Taxonomy_MetaData_CMB2 extends Taxonomy_MetaData {
 		if ( ! class_exists( 'CMB2' ) ) {
 			return;
 		}
+
 		$this->do_override_filters( $term_id );
 
 		$object_id = $this->id( $term_id );
-		$cmb = cmb2_get_metabox( $this->metabox, $object_id );
 
-		// if passing a metabox ID, and that ID was not found
-		if ( ! $cmb ) {
-			return;
-		}
+		// Hard-code object ID
+		$this->cmb->object_id( $object_id );
 
 		// Hard-code object type
-		$cmb->object_type( 'options-page' );
+		$this->cmb->object_type( 'options-page' );
 
 		// Enqueue JS/CSS
-		if ( $cmb->prop( 'cmb_styles' ) ) {
+		if ( $this->cmb->prop( 'cmb_styles' ) ) {
 			CMB2_hookup::enqueue_cmb_css();
 		}
-		CMB2_hookup::enqueue_cmb_js();
+
+		if ( $this->cmb->prop( 'enqueue_js' ) ) {
+			CMB2_hookup::enqueue_cmb_js();
+		}
 
 		// Add object id to the form for easy access
 		printf( '<input type="hidden" name="term_opt_name" value="%s">', $object_id );
 		printf( '<input type="hidden" name="object_id" value="%s">', $object_id );
 
 		// Show cmb form
-		$cmb->show_form();
+		$this->cmb->show_form();
 	}
 
 	/**
@@ -69,22 +99,20 @@ class Taxonomy_MetaData_CMB2 extends Taxonomy_MetaData {
 	 * @param  int $term_id Term's ID
 	 */
 	public function do_save( $term_id ) {
-
 		if ( ! class_exists( 'CMB2' ) ) {
 			return;
 		}
 
 		$object_id = $this->id( $term_id );
-		$cmb = cmb2_get_metabox( $this->metabox, $object_id );
 
 		if (
 			// check nonce
-			isset( $_POST[ $cmb->nonce() ] )
-			&& wp_verify_nonce( $_POST[ $cmb->nonce() ], $cmb->nonce() )
+			isset( $_POST[ $this->cmb->nonce() ] )
+			&& wp_verify_nonce( $_POST[ $this->cmb->nonce() ], $this->cmb->nonce() )
 		) {
 
 			$this->do_override_filters( $term_id );
-			$cmb->save_fields( $object_id, 'options-page', $_POST );
+			$this->cmb->save_fields( $object_id, 'options-page', $_POST );
 		}
 	}
 
@@ -127,8 +155,9 @@ class Taxonomy_MetaData_CMB2 extends Taxonomy_MetaData {
 	 * @return mixed             Requested value | false
 	 */
 	public function get_meta( $term_id, $key = '' ) {
-		if ( ! class_exists( 'CMB2' ) )
+		if ( ! class_exists( 'CMB2' ) ) {
 			return;
+		}
 
 		$this->do_override_filters( $term_id );
 
