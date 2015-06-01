@@ -2,7 +2,7 @@
 
 require_once( 'Taxonomy_MetaData.php' );
 
-/**
+/*
  * Instantiate our taxonomy meta classes
  */
 new Taxonomy_MetaData( 'category', array(
@@ -27,14 +27,14 @@ new Taxonomy_MetaData( 'post_tag', array(
 	),
 ) );
 
-/* Available methods:
-
-Taxonomy_MetaData::get( 'category' );
-Taxonomy_MetaData::get( 'category', 'best-of', 'sidebar' );
-Taxonomy_MetaData::get( 'post_tag' );
-Taxonomy_MetaData::get( 'post_tag', 'on-the-go', 'arbitrary_text' );
-Taxonomy_MetaData::delete( 'post_tag', 'on-the-go', 'arbitrary_text' );
-$new_value = 'This is some new arbitrary text';
-Taxonomy_MetaData::set( 'post_tag', 'on-the-go', 'arbitrary_text', $new_value );
-
+/*
+ * Available methods:
+ *
+ * Taxonomy_MetaData::get( 'category' );
+ * Taxonomy_MetaData::get( 'category', 'best-of', 'sidebar' );
+ * Taxonomy_MetaData::get( 'post_tag' );
+ * Taxonomy_MetaData::get( 'post_tag', 'on-the-go', 'arbitrary_text' );
+ * Taxonomy_MetaData::delete( 'post_tag', 'on-the-go', 'arbitrary_text' );
+ * $new_value = 'This is some new arbitrary text';
+ * Taxonomy_MetaData::set( 'post_tag', 'on-the-go', 'arbitrary_text', $new_value );
 */
