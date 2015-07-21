@@ -112,7 +112,7 @@ function taxonomy_meta_initiate() {
 	/**
 	 * Instantiate our taxonomy meta object
 	 */
-	new Taxonomy_MetaData( 'category', $fields, $title, $overrides );
+	new Taxonomy_MetaData( 'category', $fields, $title, $wlo_overrides );
 }
 taxonomy_meta_initiate();
 ```
