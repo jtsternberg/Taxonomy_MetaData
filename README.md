@@ -1,6 +1,8 @@
 Taxonomy_MetaData
 =================
 
+**YOU SHOULD NO LONGER USE THIS AS [TERM META IS NOW IN CORE](https://make.wordpress.org/core/2015/10/23/4-4-taxonomy-roundup/), AND [CMB2 NOW SUPPORTS IT](https://github.com/WebDevStudios/CMB2/commit/5f8e85398c6641f50a703ea2f3caf0b210d13aea).**
+
 WordPress Helper Class for saving pseudo-metadata for taxonomy terms. This is not recommend if using on a very large number of terms, UNLESS using a plugin like [wp-large-options](https://github.com/voceconnect/wp-large-options/). The third parameter is used to override the get/set/delete options callbacks so that you can use [wp-large-options](https://github.com/voceconnect/wp-large-options/) (or something like it).
 
 Includes an extended class for using [CMB2](https://github.com/WebDevStudios/CMB2) to generate the actual form fields. This is handy if you need more advanced fields, or do not want to create your own field `render_cb`s.
